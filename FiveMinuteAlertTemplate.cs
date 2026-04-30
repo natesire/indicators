@@ -36,7 +36,7 @@ namespace NinjaTrader.NinjaScript.Indicators
         // Unique ID for the alert to control rearm behavior
         private const string AlertId = "FiveMinuteAlertId";
 		
-		private const int minutesInMilliseconds = 60_000;
+		private const int oneMinutesInMilliseconds = 60_000; // Set interval to 1 minutes (60,000 milliseconds)
 
         protected override void OnStateChange()
         {
@@ -44,7 +44,7 @@ namespace NinjaTrader.NinjaScript.Indicators
             {
                 Description = @"Alerts every five minutes. Edit the AlertMethod() for custom logic.";
                 Name = "FiveMinuteAlertTemplate";
-                Calculate = Calculate.OnBarClose; // Timer runs independently, so this setting doesn't affect it
+                Calculate = Calculate.OnPriceChange; // Timer runs independently, so this setting doesn't affect it
                 IsOverlay = true; // Doesn't plot anything on the chart
                 IsSuspendedWhileInactive = true; // Save resources when chart is not visible
             }
@@ -52,9 +52,9 @@ namespace NinjaTrader.NinjaScript.Indicators
             {
                 // Instantiate and configure the timer
                 _alertTimer = new System.Timers.Timer();
-                // Set interval to 1 minutes (60,000 milliseconds)
-                _alertTimer.Interval = minutesInMilliseconds; 
-                _alertTimer.AutoReset = true; // Keep firing every interval
+                
+                _alertTimer.Interval = oneMinutesInMilliseconds; 
+                _alertTimer.AutoReset = false; // Keep firing every interval
                 _alertTimer.Elapsed += OnTimerElapsed;
             }
             else if (State == State.Terminated)
