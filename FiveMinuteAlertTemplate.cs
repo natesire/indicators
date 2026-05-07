@@ -45,14 +45,13 @@ namespace NinjaTrader.NinjaScript.Indicators
                 Description = @"Alerts every five minutes. Edit the AlertMethod() for custom logic.";
                 Name = "FiveMinuteAlertTemplate";
                 Calculate = Calculate.OnPriceChange; // Timer runs independently, so this setting doesn't affect it
-                IsOverlay = true; // Doesn't plot anything on the chart
+                IsOverlay = true; // plot anything on the chart
                 IsSuspendedWhileInactive = true; // Save resources when chart is not visible
             }
             else if (State == State.DataLoaded)
             {
                 // Instantiate and configure the timer
                 _alertTimer = new System.Timers.Timer();
-                
                 _alertTimer.Interval = oneMinutesInMilliseconds; 
                 _alertTimer.AutoReset = false; // Keep firing every interval
                 _alertTimer.Elapsed += OnTimerElapsed;
@@ -100,17 +99,10 @@ namespace NinjaTrader.NinjaScript.Indicators
             TriggerCustomEvent(AlertMethod, null);
         }
 
-        /// <summary>
-        /// *** MODIFY THIS METHOD FOR YOUR CUSTOM ALERT CONDITIONS ***
-        /// This is where you implement your own logic.
+        /// *** MODIFY THIS METHOD FOR YOUR CUSTOM ALERT LOGIC***
         /// The method is called every 5 minutes.
-        /// </summary>
         private void AlertMethod(object state)
         {
-            // ==================================================
-            // 1. START: YOUR CUSTOM ALERT CONDITIONS GO HERE
-            // ==================================================
-            
             // Example Condition 1: Always true - fires every 5 minutes.
             // REPLACE THIS with your own logic (e.g., price crossing a level, indicator values, etc.)
             bool myCustomCondition = true; 
@@ -119,14 +111,12 @@ namespace NinjaTrader.NinjaScript.Indicators
             // bool aboveSma = Close[0] > SMA(20)[0];
             
             // Combine conditions as needed
-            // bool shouldAlert = myCustomCondition; // Default for this template
             bool shouldAlert = myCustomCondition; // Change this to your combined condition
             
             // ==================================================
             // END: CUSTOM ALERT CONDITIONS
             // ==================================================
             
-            // If conditions are met, trigger the alert
             if (shouldAlert)
             {
                 TriggerAlert("5-Minute Alert Triggered at " + Time[0].ToString("HH:mm:ss"));
