@@ -37,7 +37,6 @@ namespace NinjaTrader.NinjaScript.Indicators
         private const string AlertId = "FiveMinuteAlertId";
 		
 		private const int oneMinutesInMilliseconds = 60_000; // Set interval to 1 minutes (60,000 milliseconds)
-
         private static void OutputWindow(string message) => Print(message); 
 
         protected override void OnStateChange()
@@ -52,7 +51,6 @@ namespace NinjaTrader.NinjaScript.Indicators
             }
             else if (State == State.DataLoaded)
             {
-                // Instantiate and configure the timer
                 _alertTimer = new System.Timers.Timer();
                 _alertTimer.Interval = oneMinutesInMilliseconds; 
                 _alertTimer.AutoReset = false; // Keep firing every interval
@@ -86,10 +84,8 @@ namespace NinjaTrader.NinjaScript.Indicators
             }
         }
 
-        /// <summary>
         /// Event handler for the timer elapsed event.
         /// IMPORTANT: Timer runs on a different thread. Use TriggerCustomEvent to safely access NinjaScript methods.
-        /// </summary>
         private void OnTimerElapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
             // Check if we are still in Realtime state and the chart/indicator is still valid
