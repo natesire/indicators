@@ -38,6 +38,8 @@ namespace NinjaTrader.NinjaScript.Indicators
 		
 		private const int oneMinutesInMilliseconds = 60_000; // Set interval to 1 minutes (60,000 milliseconds)
 
+        private static void OutputWindow(string message) => Print(message); 
+
         protected override void OnStateChange()
         {
             if (State == State.SetDefaults)
@@ -77,7 +79,7 @@ namespace NinjaTrader.NinjaScript.Indicators
             {
                 _alertTimer.Start();
                 _timerStarted = true;
-                Print("FiveMinuteAlertTemplate: Timer started. Alerts will trigger every 5 minutes.");
+                OutputWindow("FiveMinuteAlertTemplate: Timer started. Alerts will trigger every 5 minutes.");
                 
                 // Optional: Fire an alert immediately to confirm the script is active
                 // TriggerAlert("Template Loaded - Monitoring Started");
@@ -116,16 +118,10 @@ namespace NinjaTrader.NinjaScript.Indicators
             // ==================================================
             // END: CUSTOM ALERT CONDITIONS
             // ==================================================
-            
-            if (shouldAlert)
-            {
-                TriggerAlert("5-Minute Alert Triggered at " + Time[0].ToString("HH:mm:ss"));
-            }
-            else
-            {
-                // Optional: Print a message to the Output window for debugging
-                // Print("FiveMinuteAlertTemplate: Condition not met at " + Time[0]);
-            }
+
+            time = Time[0].ToString("HH:mm:ss");
+            shouldAlert ? TriggerAlert("5-Minute Alert Triggered at " + time) : OutputWindow("FiveMinuteAlertTemplate: Condition not met at " + time);
+           
         }
         
         /// <summary>
@@ -153,8 +149,7 @@ namespace NinjaTrader.NinjaScript.Indicators
                   Brushes.DarkBlue, 
                   Brushes.White);
                   
-            // Also send a message to the NinjaScript Output window for debugging
-            Print(customMessage);
+            OutputWindow(customMessage);
         }
     }
 }
